@@ -1,0 +1,42 @@
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === TypeScript build ===
+dist/
+build/
+*.tsbuildinfo
+
+# === Logs (pino, etc.) ===
+logs/
+*.log
+
+# === Environment variables ===
+.env
+.env.local
+.env.*.local
+
+# === Test coverage (если включишь в Jest) ===
+coverage/
+
+# === IDE / Editors ===
+# VSCode
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Temp files ===
+tmp/
+temp/
+*.tmp
