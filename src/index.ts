@@ -4,7 +4,8 @@
 // // console.log(`${APP_NAME} started`);
 // // logger.info(`${APP_NAME} started`);
 
-import path from 'path';
+import * as path from 'path';
+
 import { logger } from './logger/logger';
 import { ShapeFileReaderService } from './services/shape-file-reader';
 import { OvalFactory } from './factories/oval-factory';

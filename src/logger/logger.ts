@@ -1,6 +1,7 @@
 import pino from 'pino';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
+
 
 const LOGS_DIR = path.join(__dirname, '..', '..', 'logs');
 const LOG_FILE_PATH = path.join(LOGS_DIR, 'app.log');
