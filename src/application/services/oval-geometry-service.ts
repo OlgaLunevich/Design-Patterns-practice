@@ -49,9 +49,8 @@ export class OvalGeometryService {
         return result.value;
     }
 
-    /**
-     * Приближённый периметр эллипса по формуле Рамануджана.
-     */
+     // Приближённый периметр эллипса по формуле Рамануджана.
+
     getPerimeterApprox(oval: Oval): number {
         const { a, b } = this.getSemiAxes(oval);
 
@@ -74,15 +73,14 @@ export class OvalGeometryService {
         return Math.abs(a - b) < EPSILON;
     }
 
-    /**
-     * Проверяет, пересекает ли овал ТОЛЬКО ОДНУ из осей (OX или OY)
-     * на расстоянии не более distance от начала координат.
-     *
-     * Упрощённая логика:
-     * - строим ограничивающий прямоугольник;
-     * - смотрим, пересекает ли он ось OX (y=0) и/или OY (x=0)
-     *   в пределах [-distance, distance].
-     */
+     //  Проверяет, пересекает ли овал ТОЛЬКО ОДНУ из осей (OX или OY)
+     //  на расстоянии не более distance от начала координат.
+     //
+     //  Упрощённая логика:
+     //  - строим ограничивающий прямоугольник;
+     //  - смотрим, пересекает ли он ось OX (y=0) и/или OY (x=0)
+     //   в пределах [-distance, distance].
+
     intersectsOnlyOneAxisWithinDistance(oval: Oval, distance: number): boolean {
         const first = oval.getFirstCorner();
         const second = oval.getSecondCorner();
@@ -103,11 +101,10 @@ export class OvalGeometryService {
         return (intersectsOX && !intersectsOY) || (!intersectsOX && intersectsOY);
     }
 
-    /**
-     * Соответствуют ли две точки определению овала:
-     * не лежат ли они на одной вертикальной или горизонтальной прямой.
-     * Для наших данных это эквивалентно проверке a > 0 и b > 0.
-     */
+    //  Соответствуют ли две точки определению овала:
+    //  не лежат ли они на одной вертикальной или горизонтальной прямой.
+    //  Для наших данных это эквивалентно проверке a > 0 и b > 0.
+
     arePointsFormOval(oval: Oval): boolean {
         return this.isValidOval(oval);
     }

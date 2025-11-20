@@ -47,24 +47,21 @@ export class ConeGeometryService {
         return result.value;
     }
 
-    /**
-     * Проверяет, находится ли основание конуса на одной из координатных плоскостей.
-     * Для упрощения считаем, что ось конуса направлена вдоль оси OZ,
-     * поэтому основание лежит в плоскости z = const.
-     * Тогда основание на координатной плоскости, если z0 ≈ 0 (плоскость OXY).
-     */
+    //  Проверяет, находится ли основание конуса на одной из координатных плоскостей.
+    //  Для упрощения считаем, что ось конуса направлена вдоль оси OZ,
+    //  поэтому основание лежит в плоскости z = const.
+    //  Тогда основание на координатной плоскости, если z0 ≈ 0 (плоскость OXY).
+
     isBaseOnCoordinatePlane(cone: Cone): boolean {
         const z0 = cone.getBaseCenter().getZ() ?? 0;
         return Math.abs(z0) < EPSILON;
     }
+     // Вычисляет объёмы двух частей конуса,
+     // получающихся при рассечении его плоскостью OXY (z = 0).
+     //
+     // upperVolume — часть с z >= 0
+     // lowerVolume — часть с z <= 0
 
-    /**
-     * Вычисляет объёмы двух частей конуса,
-     * получающихся при рассечении его плоскостью OXY (z = 0).
-     *
-     * upperVolume — часть с z >= 0
-     * lowerVolume — часть с z <= 0
-     */
     getVolumeSplitByOxyPlane(cone: Cone): { upperVolume: number; lowerVolume: number } {
         const baseCenterZ = cone.getBaseCenter().getZ() ?? 0;
         const height = cone.getHeight();

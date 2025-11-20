@@ -41,10 +41,6 @@ export class OvalInputValidator implements Validator<string, OvalInputData> {
         const x2 = Number(x2Raw);
         const y2 = Number(y2Raw);
 
-        // Здесь пока только базовая проверка.
-        // Геометрические условия (точки не на одной прямой и т.п.)
-        // сделаем в отдельном сервисе.
-
         return {
             isValid: true,
             value: {
