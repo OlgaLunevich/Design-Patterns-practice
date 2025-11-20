@@ -1,6 +1,6 @@
-import { ConeFactory } from '../src/factories/cone-factory';
-import { ConeInputValidator } from '../src/validation/cone-input-validator';
-import { Cone } from '../src/domain/cone';
+import { ConeFactory } from '../src/application/factories/cone-factory';
+import { ConeInputValidator } from '../src/shared/validation/cone-input-validator';
+import { Cone } from '../src/domain/entities/cone';
 
 describe('ConeFactory', () => {
     const factory = new ConeFactory(new ConeInputValidator());

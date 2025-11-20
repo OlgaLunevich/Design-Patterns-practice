@@ -1,6 +1,6 @@
-import { Point } from '../src/domain/point';
-import { Oval } from '../src/domain/oval';
-import { OvalGeometryService } from '../src/services/oval-geometry-service';
+import { Point } from '../src/domain/entities/point';
+import { Oval } from '../src/domain/entities/oval';
+import { OvalGeometryService } from '../src/application/services/oval-geometry-service';
 
 describe('OvalGeometryService - axis intersections', () => {
     const service = new OvalGeometryService();

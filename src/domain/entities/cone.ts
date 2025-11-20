@@ -1,4 +1,4 @@
-import { Shape, ShapeType } from './shape';
+import { Shape, ShapeType } from '../shapes/shape';
 import { Point } from './point';
 
 export class Cone implements Shape {

@@ -1,4 +1,4 @@
-import { OvalInputValidator } from '../src/validation/oval-input-validator';
+import { OvalInputValidator } from '../src/shared/validation/oval-input-validator';
 
 describe('OvalInputValidator', () => {
     const validator = new OvalInputValidator();

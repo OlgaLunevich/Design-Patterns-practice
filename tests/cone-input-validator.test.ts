@@ -1,4 +1,4 @@
-import { ConeInputValidator } from '../src/validation/cone-input-validator';
+import { ConeInputValidator } from '../src/shared/validation/cone-input-validator';
 
 describe('ConeInputValidator', () => {
     const validator = new ConeInputValidator();

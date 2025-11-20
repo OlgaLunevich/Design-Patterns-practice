@@ -1,6 +1,6 @@
-import { OvalFactory } from '../src/factories/oval-factory';
-import { OvalInputValidator } from '../src/validation/oval-input-validator';
-import { Oval } from '../src/domain/oval';
+import { OvalFactory } from '../src/application/factories/oval-factory';
+import { OvalInputValidator } from '../src/shared/validation/oval-input-validator';
+import { Oval } from '../src/domain/entities/oval';
 
 describe('OvalFactory', () => {
     const factory = new OvalFactory(new OvalInputValidator());

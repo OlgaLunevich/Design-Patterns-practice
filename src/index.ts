@@ -6,10 +6,10 @@
 
 import * as path from 'path';
 
-import { logger } from './logger/logger';
-import { ShapeFileReaderService } from './services/shape-file-reader';
-import { OvalFactory } from './factories/oval-factory';
-import { ConeFactory } from './factories/cone-factory';
+import { logger } from './infrastructure/logger/logger';
+import { ShapeFileReaderService } from './infrastructure/file/shape-file-reader';
+import { OvalFactory } from './application/factories/oval-factory';
+import { ConeFactory } from './application/factories/cone-factory';
 
 export const APP_NAME = 'shapes-app';
 

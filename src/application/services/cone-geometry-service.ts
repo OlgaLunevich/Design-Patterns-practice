@@ -1,7 +1,7 @@
-import { Cone } from '../domain/cone';
-import { GeometryResultValidator } from '../validation/geometry-result-validator';
-import { logger } from '../logger/logger';
-import { PI, EPSILON } from '../constants/math';
+import { Cone } from '../../domain/entities/cone';
+import { GeometryResultValidator } from '../../shared/validation/geometry-result-validator';
+import { logger } from '../../infrastructure/logger/logger';
+import { PI, EPSILON } from '../../shared/constants/math';
 
 export class ConeGeometryService {
     private readonly resultValidator: GeometryResultValidator;

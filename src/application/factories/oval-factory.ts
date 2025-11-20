@@ -1,8 +1,8 @@
 import { ShapeFactory } from './shape-factory';
-import { Oval } from '../domain/oval';
-import { Point } from '../domain/point';
-import { OvalInputValidator } from '../validation/oval-input-validator';
-import { logger } from '../logger/logger';
+import { Oval } from '../../domain/entities/oval';
+import { Point } from '../../domain/entities/point';
+import { OvalInputValidator } from '../../shared/validation/oval-input-validator';
+import { logger } from '../../infrastructure/logger/logger';
 
 export class OvalFactory implements ShapeFactory<Oval> {
     private readonly validator: OvalInputValidator;

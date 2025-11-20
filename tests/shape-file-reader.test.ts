@@ -1,13 +1,13 @@
 import * as path from 'path';
 
 
-import { ShapeFileReaderService } from '../src/services/shape-file-reader';
-import { OvalFactory } from '../src/factories/oval-factory';
-import { ConeFactory } from '../src/factories/cone-factory';
-import { OvalInputValidator } from '../src/validation/oval-input-validator';
-import { ConeInputValidator } from '../src/validation/cone-input-validator';
-import { Oval } from '../src/domain/oval';
-import { Cone } from '../src/domain/cone';
+import { ShapeFileReaderService } from '../src/infrastructure/file/shape-file-reader';
+import { OvalFactory } from '../src/application/factories/oval-factory';
+import { ConeFactory } from '../src/application/factories/cone-factory';
+import { OvalInputValidator } from '../src/shared/validation/oval-input-validator';
+import { ConeInputValidator } from '../src/shared/validation/cone-input-validator';
+import { Oval } from '../src/domain/entities/oval';
+import { Cone } from '../src/domain/entities/cone';
 
 describe('ShapeFileReaderService', () => {
     const reader = new ShapeFileReaderService();

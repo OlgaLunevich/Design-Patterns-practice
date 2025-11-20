@@ -1,7 +1,7 @@
-import { Oval } from '../domain/oval';
-import { GeometryResultValidator } from '../validation/geometry-result-validator';
-import { logger } from '../logger/logger';
-import { EPSILON, PI } from '../constants/math';
+import { Oval } from '../../domain/entities/oval';
+import { GeometryResultValidator } from '../../shared/validation/geometry-result-validator';
+import { logger } from '../../infrastructure/logger/logger';
+import { EPSILON, PI } from '../../shared/constants/math';
 
 export class OvalGeometryService {
     private readonly resultValidator: GeometryResultValidator;

@@ -1,7 +1,7 @@
-import { Cone } from '../src/domain/cone';
-import { Point } from '../src/domain/point';
-import { ConeGeometryService } from '../src/services/cone-geometry-service';
-import { PI } from '../src/constants/math';
+import { Cone } from '../src/domain/entities/cone';
+import { Point } from '../src/domain/entities/point';
+import { ConeGeometryService } from '../src/application/services/cone-geometry-service';
+import { PI } from '../src/shared/constants/math';
 
 describe('ConeGeometryService - volume split by OXY plane', () => {
     const service = new ConeGeometryService();

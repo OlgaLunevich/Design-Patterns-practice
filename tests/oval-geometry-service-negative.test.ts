@@ -1,8 +1,8 @@
-import { OvalGeometryService } from '../src/services/oval-geometry-service';
-import { Oval } from '../src/domain/oval';
-import { Point } from '../src/domain/point';
-import { GeometryResultValidator } from '../src/validation/geometry-result-validator';
-import { ValidationResult } from '../src/validation/validation-result';
+import { OvalGeometryService } from '../src/application/services/oval-geometry-service';
+import { Oval } from '../src/domain/entities/oval';
+import { Point } from '../src/domain/entities/point';
+import { GeometryResultValidator } from '../src/shared/validation/geometry-result-validator';
+import { ValidationResult } from '../src/shared/validation/validation-result';
 
 class AlwaysInvalidGeometryResultValidator extends GeometryResultValidator {
     // переопределяем validate, чтобы возвращать невалидный результат

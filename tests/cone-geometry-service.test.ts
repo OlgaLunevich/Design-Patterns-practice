@@ -1,7 +1,7 @@
-import { Point } from '../src/domain/point';
-import { Cone } from '../src/domain/cone';
-import { ConeGeometryService } from '../src/services/cone-geometry-service';
-import { PI } from '../src/constants/math';
+import { Point } from '../src/domain/entities/point';
+import { Cone } from '../src/domain/entities/cone';
+import { ConeGeometryService } from '../src/application/services/cone-geometry-service';
+import { PI } from '../src/shared/constants/math';
 
 describe('ConeGeometryService', () => {
     const service = new ConeGeometryService();

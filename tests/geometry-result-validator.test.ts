@@ -1,4 +1,4 @@
-import { GeometryResultValidator } from '../src/validation/geometry-result-validator';
+import { GeometryResultValidator } from '../src/shared/validation/geometry-result-validator';
 
 describe('GeometryResultValidator', () => {
     const validator = new GeometryResultValidator();

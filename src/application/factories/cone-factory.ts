@@ -1,8 +1,8 @@
 import { ShapeFactory } from './shape-factory';
-import { Cone } from '../domain/cone';
-import { Point } from '../domain/point';
-import { ConeInputValidator } from '../validation/cone-input-validator';
-import { logger } from '../logger/logger';
+import { Cone } from '../../domain/entities/cone';
+import { Point } from '../../domain/entities/point';
+import { ConeInputValidator } from '../../shared/validation/cone-input-validator';
+import { logger } from '../../infrastructure/logger/logger';
 
 export class ConeFactory implements ShapeFactory<Cone> {
     private readonly validator: ConeInputValidator;

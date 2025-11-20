@@ -1,8 +1,8 @@
-import { ConeGeometryService } from '../src/services/cone-geometry-service';
-import { Cone } from '../src/domain/cone';
-import { Point } from '../src/domain/point';
-import { GeometryResultValidator } from '../src/validation/geometry-result-validator';
-import { ValidationResult } from '../src/validation/validation-result';
+import { ConeGeometryService } from '../src/application/services/cone-geometry-service';
+import { Cone } from '../src/domain/entities/cone';
+import { Point } from '../src/domain/entities/point';
+import { GeometryResultValidator } from '../src/shared/validation/geometry-result-validator';
+import { ValidationResult } from '../src/shared/validation/validation-result';
 
 class AlwaysInvalidGeometryResultValidator extends GeometryResultValidator {
     // eslint-disable-next-line class-methods-use-this
