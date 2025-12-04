@@ -1,21 +1,19 @@
-// import { logger } from './logger/logger';
-// // export const APP_NAME = 'shapes-app';
-// //
-// // console.log(`${APP_NAME} started`);
-// // logger.info(`${APP_NAME} started`);
-
 import * as path from 'path';
 
 import { logger } from './infrastructure/logger/logger';
 import { ShapeFileReaderService } from './infrastructure/file/shape-file-reader';
 import { OvalFactory } from './application/factories/oval-factory';
 import { ConeFactory } from './application/factories/cone-factory';
+import { InMemoryShapeRepository } from './infrastructure/repositories/in-memory-shape-repository';
+import { Shape } from './domain/shapes/shape';
 
 export const APP_NAME = 'shapes-app';
 
 const reader = new ShapeFileReaderService();
 const ovalFactory = new OvalFactory();
 const coneFactory = new ConeFactory();
+
+const shapeRepository = new InMemoryShapeRepository<Shape>();
 
 try {
     const ovalsFilePath = path.join('data', 'ovals.txt');
@@ -24,9 +22,16 @@ try {
     const ovals = reader.readShapesFromFile(ovalsFilePath, ovalFactory);
     const cones = reader.readShapesFromFile(conesFilePath, coneFactory);
 
+    shapeRepository.addMany(ovals);
+    shapeRepository.addMany(cones);
+
     logger.info(
-        { ovalsCount: ovals.length, conesCount: cones.length },
-        `${APP_NAME} started and shapes loaded`,
+        {
+            ovalsCount: ovals.length,
+            conesCount: cones.length,
+            totalShapes: shapeRepository.getAll().length,
+        },
+        `${APP_NAME} started, shapes loaded into repository`,
     );
 } catch (error) {
     logger.error({ error }, 'Failed to initialize shapes');
