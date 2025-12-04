@@ -125,6 +125,4 @@ export class ConeGeometryService {
             lowerVolume: lowerResult.value,
         };
     }
-
-
 }

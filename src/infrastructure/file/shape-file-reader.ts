@@ -4,7 +4,7 @@ import * as path from 'path';
 import { Shape } from '../../domain/shapes/shape';
 import { ShapeFactory } from '../../application/factories/shape-factory';
 import { logger } from '../logger/logger';
-import { FileError } from '../../domain/errors/file-error';
+import { FileError } from '../../domain/exceptions/file-error';
 
 export class ShapeFileReaderService {
     readShapesFromFile<T extends Shape>(
