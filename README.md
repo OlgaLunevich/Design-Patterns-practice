@@ -1,9 +1,35 @@
-# Design Patterns — Овал и Конус (Задание 3.8)
+# Design Patterns — Овал и Конус (Задание 3.8 + Расширение: Repository, Specification, Comparator, Warehouse, Observer, Singleton)
 
 Проект выполнен в соответствии с требованиями дисциплины **Design Patterns**.  
 Вариант: **3.8 — Овал и Конус**.
 
-Цель работы — разработать приложение на TypeScript, реализующее объектную модель фигур **Овал** и **Конус**, с валидацией входных данных, вычислением геометрических параметров, фабриками (Factory Method), тестированием, логированием и архитектурным разделением слоёв.
+Цель работы — разработать приложение на TypeScript
+
+Приложение реализует:
+
+- объектную модель фигур Овал и Конус;
+
+- чтение данных из файла и валидацию;
+
+- вычисление площадей, объёмов, периметров;
+
+- фабрики (Factory Method);
+
+- поиск фигур по паттерну Specification;
+
+- сортировки по паттерну Comparator;
+
+- хранение фигур в Repository;
+
+- хранение вычисленных значений в Warehouse (Singleton);
+
+- автоматические обновления метрик через Observer;
+
+- полное покрытие Jest-тестами;
+
+- логирование (pino);
+
+- архитектурное разделение на слои.
 
 ---
 
@@ -13,19 +39,37 @@
 
 ```text
 src/
-  domain/                # Чистый домен (модели, интерфейсы, ошибки)
+  domain/                # Чистый домен: сущности, интерфейсы, контракты
     entities/
       point.ts
       oval.ts
       cone.ts
     shapes/
       shape.ts
+    repositories/
+      shape-repository.ts
+    specifications/
+      specification.ts
+      shape-id-specification.ts
+      shape-type-specification.ts
+      first-quadrant-specification.ts
+      distance-range-specification.ts
+      measure-range-specification.ts
+    comparators/
+      comparator.ts
+      shape-id-comparator.ts
+      shape-type-comparator.ts
+      oval-first-point-x-comparator.ts
+      cone-base-center-y-comparator.ts
+    observer/
+      shape-observer.ts
+      shape-change-type.ts
     errors/
       app-error.ts
       validation-error.ts
       file-error.ts
 
-  application/           # Бизнес-логика, паттерны, use-cases
+  application/           # Сервисы, фабрики, бизнес-логика
     factories/
       shape-factory.ts
       oval-factory.ts
@@ -33,14 +77,19 @@ src/
     services/
       oval-geometry-service.ts
       cone-geometry-service.ts
+      shape-search-service.ts
+    warehouse/
+      shape-warehouse.ts     # Singleton + Observer
 
-  infrastructure/        # Работа с файлами, логирование
+  infrastructure/         # Работа с файлами, логирование, репозитории
     file/
       shape-file-reader.ts
     logger/
       logger.ts
+    repositories/
+      in-memory-shape-repository.ts   # Реализация Repository + Observable
 
-  shared/                # Утилиты, валидаторы, константы
+  shared/
     validation/
       validator.ts
       validation-result.ts
@@ -51,7 +100,7 @@ src/
       math.ts
       regex.ts
 
-  index.ts               # Точка входа
+index.ts                  # Точка входа
 ```
 
 
@@ -78,7 +127,103 @@ src/
 
 Геометрия реализована в сервисах (`application/services`).
 
----
+### **Repository (расширенная реализация)**
+
+Реализация — InMemoryShapeRepository, который поддерживает:
+
+- `add`, `addMany`
+
+- `update`
+
+- `removeById`
+
+- `getById`, `getAll`, `clear`
+
+- `findBySpecification`
+
+- `sort(Comparator)`
+
+### **Specification (поиск фигур по условиям)**
+
+
+| Спецификация               | Файл                        | Что делает                                     |
+| -------------------------- | --------------------------- | ---------------------------------------------- |
+| ShapeIdSpecification       | shape-id-specification.ts   | поиск по ID                                    |
+| ShapeTypeSpecification     | shape-type-specification.ts | поиск по типу (oval/cone)                      |
+| FirstQuadrantSpecification | first-quadrant…             | центр в I квадранте                            |
+| DistanceRangeSpecification | distance-range…             | расстояние от начала координат                 |
+| MeasureRangeSpecification  | measure-range…              | площадь/периметр/объём/поверхность в диапазоне |
+
+Используются в `ShapeSearchService` для:
+
+- поиска овалов по диапазону площади/периметра,
+
+- поиска конусов по объёму/площади поверхности,
+
+- поиска фигур в первом квадранте,
+
+- поиска по типу и ID,
+
+- поиска по расстоянию.
+
+### **Comparator (сортировка фигур)**
+Реализованы компараторы:
+
+`ShapeIdComparator`
+
+`ShapeTypeComparator`
+
+`OvalFirstPointXComparator`
+
+`OvalFirstPointYComparator`
+
+`ConeBaseCenterXComparator`
+
+`ConeBaseCenterYComparator`
+
+Проект поддерживает сортировки:
+
+- по ID,
+
+- по типу,
+
+- по координатам первой точки овала,
+
+- по координатам центра конуса.
+
+Сортировка выполняется через:
+
+`repo.sort(new ShapeIdComparator());`
+
+### **Warehouse (Singleton + Observer)**
+
+Warehouse хранит геометрические параметры фигур:
+
+Для Овала:
+
+- площадь
+
+- периметр
+
+Для Конуса:
+
+- объём
+
+- площадь поверхности
+
+Warehouse:
+
+- является Singleton → один на всё приложение,
+
+- реализует Observer и подписан на репозиторий,
+
+- автоматически пересчитывает метрики при:
+
+- добавлении фигуры,
+
+- обновлении фигуры,
+
+- удалении фигуры.
 
 ## Формат входных файлов
 
@@ -167,16 +312,17 @@ x y z radius height
 
 ## Тестирование (Jest)
 
-Проект покрыт unit-тестами:
+| Компонент          | Покрытие                                    |
+| ------------------ | ------------------------------------------- |
+| Фабрики            | корректные/некорректные строки              |
+| Валидаторы         | входные данные, результаты вычислений       |
+| Geometry services  | площадь, периметр, объём, поверхность       |
+| Repository         | add, update, remove, sort, find             |
+| Specifications     | ID, type, quadrant, distance, measure range |
+| Comparators        | id, type, координаты                        |
+| ShapeSearchService | все методы поиска                           |
+| Warehouse          | пересчёт при add/update/remove              |
 
-- фабрики (включая негативные сценарии)
-- валидаторы входных данных
-- валидатор результатов вычислений
-- геометрия овала
-- геометрия конуса
-- пересечение овала с осями
-- рассечение конуса плоскостью OXY
-- чтение данных из файлов
 
 Команда запуска:
 
@@ -218,6 +364,20 @@ x y z radius height
 - ✔ Покрытие **unit-тестами (Jest)**
 - ✔ Соблюдены требования Style Guide (ESLint, TypeScript strict)
 - ✔ Архитектура приведена к Clean Architecture
+
+## Выполнение требований задания (вторая часть)
+
+| Требование                                    | Статус |
+| --------------------------------------------- | ------ |
+| Все объекты сохраняются в Repository          | ✔      |
+| Реализованы Specification для поиска          | ✔      |
+| Методы добавления/удаления в репозитории      | ✔      |
+| Сортировки через Comparator                   | ✔      |
+| Площади/объёмы/периметры хранятся в Warehouse | ✔      |
+| Изменение фигуры вызывает пересчёт метрик     | ✔      |
+| Использованы Observer + Singleton             | ✔      |
+| Написаны тесты для всех компонентов           | ✔      |
+
 
 ---
 
