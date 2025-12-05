@@ -70,7 +70,7 @@ describe('ShapeSearchService', () => {
             'cone-first-quadrant',
             new Point(2, 2, 0),
             1,
-            1, //2
+            1,
         );
 
         repository.addMany([
@@ -218,22 +218,6 @@ describe('ShapeSearchService', () => {
         expect(largeVolumeCones.length).toBe(1);
     });
 
-    // it('finds cones by surface area range', () => {
-    //     // Площадь поверхности cone-large > cone-small,
-    //     // поэтому диапазоны должны разделять их.
-    //     const smallAreaCones = searchService.findConesBySurfaceAreaRange(0, 50);
-    //     const largeAreaCones = searchService.findConesBySurfaceAreaRange(50, 200);
-    //
-    //     const smallIds = smallAreaCones.map((c) => c.id);
-    //     const largeIds = largeAreaCones.map((c) => c.id);
-    //
-    //     expect(smallIds).toContain('cone-small');
-    //     expect(largeIds).toContain('cone-large');
-    //
-    //     // Аналогично, предполагаем разделение для теста
-    //     expect(smallIds).not.toContain('cone-large');
-    //     expect(largeIds).not.toContain('cone-small');
-    // });
 
     it('finds cones by surface area range', () => {
         // Площадь поверхности cone-large > cone-small,
