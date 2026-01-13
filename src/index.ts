@@ -1,41 +1,41 @@
-import * as path from 'path';
+import { Project } from './domain/project';
+import { Task } from './domain/task';
+import { Developer, TeamLead } from './domain/observers';
+import { TaskStatus } from './domain/contracts';
 
-import { logger } from './infrastructure/logger/logger';
-import { ShapeFileReaderService } from './infrastructure/file/shape-file-reader';
-import { OvalFactory } from './application/factories/oval-factory';
-import { ConeFactory } from './application/factories/cone-factory';
-import { InMemoryShapeRepository } from './infrastructure/repositories/in-memory-shape-repository';
-import { Shape } from './domain/shapes/shape';
-import {ShapeWarehouse} from "./domain/warehouse/shape-warehouse";
+const alice = new Developer('Alice');
+const bob = new Developer('Bob');
+const lead = new TeamLead('Eve');
 
-export const APP_NAME = 'shapes-app';
+const root = new Project('p1', 'Team Platform');
 
-const reader = new ShapeFileReaderService();
-const ovalFactory = new OvalFactory();
-const coneFactory = new ConeFactory();
+root.attach(alice);
+root.attach(bob);
+root.attach(lead);
 
-const shapeRepository = new InMemoryShapeRepository<Shape>();
-const warehouse = ShapeWarehouse.getInstance();
-shapeRepository.addObserver(warehouse);
+const epicAuth = new Project('ep1', 'Auth Epic');
+const jwt = new Task('t1', 'Сделать JWT');
+const refresh = new Task('t2', 'Refresh token');
 
-try {
-    const ovalsFilePath = path.join('data', 'ovals.txt');
-    const conesFilePath = path.join('data', 'cones.txt');
+root.add(epicAuth);
+epicAuth.add(jwt);
+epicAuth.add(refresh);
 
-    const ovals = reader.readShapesFromFile(ovalsFilePath, ovalFactory);
-    const cones = reader.readShapesFromFile(conesFilePath, coneFactory);
+root.print();
 
-    shapeRepository.addMany(ovals);
-    shapeRepository.addMany(cones);
+jwt.setAssignee('Alice');
+jwt.setStatus(TaskStatus.InProgress);
+jwt.setStatus(TaskStatus.Done);
 
-    logger.info(
-        {
-            ovalsCount: ovals.length,
-            conesCount: cones.length,
-            totalShapes: shapeRepository.getAll().length,
-        },
-        `${APP_NAME} started, shapes loaded into repository and warehouse`,
-    );
-} catch (error) {
-    logger.error({ error }, 'Failed to initialize shapes');
-}
+refresh.setAssignee('Bob');
+refresh.setStatus(TaskStatus.InProgress);
+
+jwt.setTitle('Сделать JWT + роли');
+epicAuth.remove('t2');
+root.print();
+
+console.log('Дочерние элементы корневого проекта:');
+root.getChildren().forEach((c) => {
+  console.log(` - ${c.getTitle()} (${c.getStatus()})`);
+});
+console.log('Итоговый прогресс root:', root.getProgress(), '%');
