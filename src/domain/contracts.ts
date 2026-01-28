@@ -33,8 +33,21 @@ export interface TaskComponent {
   getId(): string;
   getTitle(): string;
   getStatus(): TaskStatus;
-  getProgress(): number; // 0..100
+  getProgress(): number;
   print(indent?: number): void;
 }
 
 export type ObservableTaskComponent = TaskComponent & Subject;
+
+export enum TaskKind {
+  Bug = 'Bug',
+  Feature = 'Feature',
+  Chore = 'Chore',
+  Generic = 'Generic',
+}
+
+export interface TaskMetaFlyweight {
+  kind: TaskKind;
+  defaultPriority: number;
+  defaultTags: string[];
+}

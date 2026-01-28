@@ -1,12 +1,22 @@
-# Design Patterns — Composite и Observer (вариант 6)
+# Design Patterns - Factory Method, Flyweight и Command (вариант 6)
 
 Система управления задачами команды разработки
 
 Проект выполнен в соответствии с требованиями дисциплины Design Patterns.
 
-Тема: Composite + Observer.
+Цель работы — реализовать систему управления задачами на TypeScript с использованием паттернов:
 
-Цель работы — разработать систему управления задачами в команде разработки на TypeScript.
+- Factory Method — создание разных типов задач;
+
+- Flyweight — повторное использование общих данных задач (метаданных типа);
+
+- Command — выполнение операций над задачами через команды.
+
+Дополнительно (база проекта):
+
+- Composite — иерархия проектов/задач/подзадач;
+
+- Observer — уведомления разработчиков об изменениях задач.
 
 Приложение реализует:
 
@@ -32,17 +42,110 @@
 
 src/
   domain/
-    contracts.ts        # Типы, интерфейсы (Observer, Subject, Composite, события)
-    task-subject.ts     # Реализация Subject
-    task.ts             # Leaf (Task)
-    project.ts          # Composite (Project) + ретрансляция событий
-    observers.ts        # Developer, TeamLead
-  index.ts              # Точка входа (демо-сценарий)
+    contracts.ts              # Типы, интерфейсы, контракты (TaskStatus, события, Observer/Subject, TaskKind, Flyweight)
+    task-subject.ts           # Реализация Subject
+    task.ts                   # Task (Leaf) + события (Observer) + ссылка на flyweight-метаданные
+    project.ts                # Project (Composite) + ретрансляция событий
+
+    observers.ts              # Developer, TeamLead (Observers)
+
+    factory/
+      task-factory.ts         # Базовая фабрика (Factory Method)
+      bug-task-factory.ts     # Конкретная фабрика задач Bug
+      feature-task-factory.ts # Конкретная фабрика задач Feature
+      chore-task-factory.ts   # Конкретная фабрика задач Chore
+
+    flyweight/
+      task-meta-factory.ts    # Flyweight Factory (кэш метаданных по TaskKind)
+
+    command/
+      command.ts              # Интерфейс Command
+      invoker.ts              # Invoker (история + undoLast)
+      create-task-command.ts  # Создание задачи через Factory
+      add-to-project-command.ts
+      change-status-command.ts
+      assign-user-command.ts
+      rename-task-command.ts
+
+  index.ts                    # Точка входа (демо-сценарий)
+
 ```
 
 ---
 
 ## Используемые паттерны
+
+### **Factory Method**
+
+Паттерн Factory Method используется для создания задач разных типов без прямого вызова new Task(...) в клиентском коде.
+
+- `TaskFactory` — абстрактная фабрика с общим методом `createTask(...)`.
+
+- Конкретные фабрики:
+
+    - `BugTaskFactory`
+
+    - `FeatureTaskFactory`
+
+    - `ChoreTaskFactory`
+
+Идея:
+
+- общий алгоритм создания зафиксирован в `createTask(...)`,
+
+- тип задачи задаётся через переопределяемые методы фабрики.
+
+### **Flyweight**
+
+Паттерн Flyweight используется для повторного использования общих данных задач (intrinsic state).
+
+В задаче выделены:
+
+- Extrinsic state (уникальные данные): `id`, `title`, `status`, `assignee` — хранятся в `Task`.
+
+- Intrinsic state (общие данные типа): `kind`, `defaultPriority`, `defaultTags` — хранятся в flyweight.
+
+`TaskMetaFactory` хранит кэш `Map<TaskKind>`, `TaskMetaFlyweight>` и возвращает один и тот же объект метаданных для задач одного типа.
+
+Таким образом, большое количество задач одного типа не дублируют одинаковые метаданные.
+
+### **Command**
+
+Паттерн Command применяется для выполнения операций над задачами через объекты-команды.
+
+- `Command` — интерфейс команд (`execute()` + опционально `undo()`).
+
+- `CommandInvoker` — запускает команды и хранит историю для `undoLast()`.
+
+Примеры команд:
+
+- `CreateTaskCommand` — создание задачи через фабрику;
+
+- `AddToProjectCommand`— добавить задачу в проект (Composite-операция);
+
+- `ChangeStatusCommand` — сменить статус;
+
+- `AssignUserCommand` — назначить исполнителя;
+
+- `RenameTaskCommand` — переименовать задачу.
+
+Команды используют методы `Task`/`Project`, поэтому:
+
+- *Observer* продолжает уведомлять разработчиков автоматически;
+
+- *Composite* остаётся структурой хранения задач.
+
+### **Пример сценария**
+
+В `index.ts`:
+
+- создаются фабрики задач,
+
+- создаются задачи через CreateTaskCommand,
+
+- операции выполняются через invoker,
+
+- наблюдатели получают события автоматически.
 
 ### **Composite**
 Паттерн **Composite** используется для построения иерархии задач:
@@ -192,17 +295,16 @@ npm start
 ```
 
 ## Выполнение требований задания
+| Требование                                  | Статус |
+| ------------------------------------------- | ------ |
+| Использован паттерн Factory Method          | ✔      |
+| Использован паттерн Flyweight               | ✔      |
+| Использован паттерн Command                 | ✔      |
+| Операции над задачами выполняются командами | ✔      |
+| Повторное использование общих данных задач  | ✔      |
+| TypeScript strict                           | ✔      |
+| Модульная архитектура                       | ✔      |
 
-| Требование                                    | Статус |
-| --------------------------------------------- | ------ |
-| Использован паттерн Composite        | ✔      |
-| Проекты содержат задачи и подзадачи       | ✔      |
-| Использован паттерн Observer      | ✔      |
-| Разработчики получают уведомления                   | ✔      |
-| Уведомление о добавлении задачи | ✔      |
-| Уведомление о смене статуса    | ✔      |
-| TypeScript strict            | ✔      |
-| Модульная архитектура           | ✔      |
 
 
 ---

@@ -3,8 +3,11 @@ import {
   TaskEvent,
   TaskStatus,
   Observer,
+  TaskMetaFlyweight,
+  TaskKind,
 } from './contracts';
 import { TaskSubject } from './task-subject';
+
 
 export class Task implements ObservableTaskComponent {
   private subject = new TaskSubject();
@@ -14,6 +17,7 @@ export class Task implements ObservableTaskComponent {
     private title: string,
     private status: TaskStatus = TaskStatus.Todo,
     private assignee: string | null = null,
+    private meta: TaskMetaFlyweight = { kind: TaskKind.Generic, defaultPriority: 3, defaultTags: [] },
   ) {}
 
   attach(observer: Observer): void {
@@ -50,6 +54,10 @@ export class Task implements ObservableTaskComponent {
     return this.status;
   }
 
+  getAssignee(): string | null {
+    return this.assignee;
+  }
+
   setTitle(newTitle: string): void {
     const old = this.title;
     this.title = newTitle;
@@ -77,11 +85,31 @@ export class Task implements ObservableTaskComponent {
     return 100;
   }
 
+  getKind(): TaskKind {
+    return this.meta.kind;
+  }
+
+  getDefaultPriority(): number {
+    return this.meta.defaultPriority;
+  }
+
+  getDefaultTags(): string[] {
+    return [...this.meta.defaultTags];
+  }
+
+  sharesMetaWith(other: Task): boolean {
+    return this.meta === other.meta;
+  }
+
+  getMetaInfo(): string {
+    return `kind=${this.meta.kind}, priority=${this.meta.defaultPriority}, tags=${this.meta.defaultTags.join(',')}`;
+  }
+
   print(indent: number = 0): void {
     const pad = ' '.repeat(indent);
     const assigneeText = this.assignee ? `, assignee=${this.assignee}` : '';
     console.log(
-      `${pad}- [${this.status}] ${this.title} (id=${this.id}${assigneeText})`,
+      `${pad}- [${this.status}] ${this.title} (id=${this.id}${assigneeText} kind=${this.meta.kind}${assigneeText})`,
     );
   }
 }
